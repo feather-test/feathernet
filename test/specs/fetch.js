@@ -8,14 +8,16 @@ describe('fetch', () => {
         featherMockRequest.install();
 
         featherMockRequest.mock({
-            exact: {
-                host: 'example.com',
+            url: {
+                exact: {
+                    host: 'example.com',
+                },
+                contains: {
+                    params: {
+                        model: 'fusion',
+                    }
+                },
             },
-            contains: {
-                params: {
-                    model: 'fusion',
-                }
-            }
         }, {
             status: 200,
             headers: {},
