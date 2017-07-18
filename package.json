@@ -1,0 +1,22 @@
+{
+  "name": "feather-mock-request",
+  "version": "0.1.0",
+  "description": "Intercept javascript requests of all types and mock responses",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/automated"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seebigs/feather-mock-request.git"
+  },
+  "author": "Chris Bigelow <seebigswork@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/seebigs/feather-mock-request/issues"
+  },
+  "dependencies": {
+    "deep-equal": "^1.0.1",
+    "seebigs-each": "^1.0.0"
+  }
+}

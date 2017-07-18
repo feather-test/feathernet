@@ -1,4 +1,4 @@
-const each = require('./each.js');
+const each = require('seebigs-each');
 
 function parseUrlString (str) {
     var tmp = str.split('//');

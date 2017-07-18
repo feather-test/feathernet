@@ -8,29 +8,39 @@ describe('fetch', () => {
         featherMockRequest.install();
 
         featherMockRequest.mock({
-            url: {
-                exact: {
+            exact: {
+                url: {
                     host: 'example.com',
-                },
-                contains: {
                     params: {
                         model: 'fusion',
-                    }
+                        doors: '4',
+                    },
+                },
+            },
+            contains: {
+                method: 'ET',
+                url: {
+                    host: 'ample',
+                    params: {
+                        model: 'fusion',
+                    },
                 },
             },
         }, {
-            status: 200,
-            headers: {},
-            data: responseData,
+            body: responseData,
         });
 
         window.fetch(url)
             .then((response) => {
                 if (response && response.ok) {
                     response.json().then(function (json) {
+                        expect(response.status).toBe(200, 'status');
                         expect(json).toBe(responseData);
                         done();
                     });
+                } else {
+                    expect('response from ' + url).toBe('ok with valid json');
+                    done();
                 }
             });
 
