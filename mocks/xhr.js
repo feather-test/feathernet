@@ -1,26 +1,59 @@
 const createResponse = require('./create_response.js');
+const statusCodes = require('./status_codes.js');
+const each = require('seebigs-each');
 
 function createMockXhr (mocks) {
     let featherMockRequest = this;
+
     return function MockXhr () {
+        let responseHeaders = {};
         let options = {
             headers: {},
         };
 
         this.readyState = 0; // UNSENT
         this.response = '';
-        this.responseText = null;
         this.responseType = '';
         this.responseUrl = '';
         this.status = 0;
-        this.statusText = '';
         this.timeout = 0;
         this.withCredentials = false;
 
+        Object.defineProperty(this, 'responseText', {
+            get: function () {
+                if (this.response) {
+                    return typeof this.response === 'string' ? this.response : JSON.stringify(this.response);
+                }
+                return '';
+            },
+            enumerable: true,
+        });
+
+        Object.defineProperty(this, 'statusText', {
+            get: function () {
+                return statusCodes[this.status] || '';
+            },
+            enumerable: true,
+        });
+
         this.abort = function(){};
+        this.onerror = function(){};
         this.onload = function(){};
         this.onprogress = function(){};
         this.onreadystatechange = function(){};
+        this.ontimeout = function(){};
+
+        this.getAllResponseHeaders = function () {
+            let ret = [];
+            each(responseHeaders, function (v, k) {
+                ret.push(k + ': ' + v);
+            });
+            return ret.join('\n');
+        };
+
+        this.getResponseHeader = function (name) {
+            return responseHeaders[name] || null;
+        };
 
         this.setRequestHeader = function (name, value) {
             options.headers[name] = value;
@@ -44,17 +77,25 @@ function createMockXhr (mocks) {
             this.onprogress();
 
             options.credentials = this.withCredentials;
-            let mockResponse = createResponse(featherMockRequest, 'xhr', this.responseUrl, options, mocks);
-
-            if (mockResponse.success) {
-                // this.response =
-            } else {
-
+            let mockResponse = createResponse(featherMockRequest, 'xhr', this.responseUrl, mocks, options);
+            let mockSuccess = mockResponse.success;
+            if (mockSuccess) {
+                responseHeaders = mockSuccess.headers;
+                this.status = mockSuccess.status;
+                this.response = mockSuccess.body ? (typeof mockSuccess.body === 'string' ? mockSuccess.body : JSON.stringify(mockSuccess.body)) : '';
             }
 
             this.readyState = 4; // DONE
             this.onreadystatechange();
-            this.onload();
+
+            if (mockSuccess) {
+                this.onload();
+            } else if (mockResponse.error) {
+                this.status = 400;
+                this.onerror(mockResponse.error);
+            } else if (mockResponse.timeout) {
+                this.ontimeout();
+            }
         };
     };
 }

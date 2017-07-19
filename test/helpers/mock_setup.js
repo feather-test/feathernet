@@ -1,6 +1,7 @@
 const featherMockRequest = require('../../index.js');
 
 featherMockRequest.install();
+
 featherMockRequest.debug();
 
 featherMockRequest.mock('http://noresponse.com');
@@ -13,7 +14,10 @@ featherMockRequest.mock('https://greetings.com', 'HELLO');
 
 featherMockRequest.mock('http://complex.com/response', {
     status: 418,
-    headers: { 'Allow-Access-Control-Origin': '*' },
+    headers: {
+        'Allow-Access-Control-Origin': '*',
+        'Content-Encoding': 'gzip',
+    },
     body: { name: 'fusion' },
 });
 

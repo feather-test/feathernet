@@ -1,16 +1,24 @@
 
-describe('fetch', () => {
+xdescribe('fetch', () => {
+
+    describe('overrides in all environments', (expect) => {
+        expect(window.fetch.name).toBe('mockFetch', 'browser');
+        expect(fetch.name).toBe('mockFetch', 'node');
+    });
 
     describe('intercepts fetch when installed', () => {
 
         describe('has a default response', (expect, done) => {
             let testUrl = 'http://noresponse.com';
-            window.fetch(testUrl)
+            fetch(testUrl)
                 .then((response) => {
                     if (response && response.ok) {
                         response.text().then(function (text) {
+                            expect(response.url).toBe(testUrl, 'url');
                             expect(response.status).toBe(200, 'status');
-                            expect(text).toBe(void 0);
+                            expect(response.statusText).toBe('OK', 'statusText');
+                            expect(response.headers).toBe({}, 'headers');
+                            expect(text).toBe(void 0, 'text');
                             done();
                         });
                     } else {
@@ -62,7 +70,10 @@ describe('fetch', () => {
                         response.json().then(function (json) {
                             expect(response.status).toBe(418, 'status');
                             expect(response.statusText).toBe("I'm a teapot", 'statusText');
-                            expect(response.headers).toBe({ 'Allow-Access-Control-Origin': '*' }, 'headers');
+                            expect(response.headers).toBe({
+                                'Allow-Access-Control-Origin': '*',
+                                'Content-Encoding': 'gzip',
+                            }, 'headers');
                             expect(json).toBe({ name: 'fusion' });
                             done();
                         });

@@ -33,7 +33,7 @@ function Json () {
 
 function Request (url, options) {
     this.url = url;
-    this.method = (options.method && options.method.toUppercase()) || 'GET';
+    this.method = (options.method && options.method.toUpperCase()) || 'GET';
     this.headers = options.headers || {};
     this.body = options.body;
     this.mode = options.mode || 'cors';
@@ -47,25 +47,23 @@ function Request (url, options) {
 function FetchResponse (url, options, response) {
     this.url = url;
     this.ok = options.ok || true;
-    this.status = options.status || 200;
-    this.statusText = options.statusText || statusCodes[this.status];
-    this.type = options.type || 'basic';
-    this.headers = options.headers || {};
+    this.status = response.status || options.status || 200;
+    this.type = response.type || options.type || 'basic';
+    this.headers = response.headers || options.headers || {};
+
+    Object.defineProperty(this, 'statusText', {
+        get: function () { return statusCodes[this.status]; },
+        enumerable: true
+    });
 
     Body.call(this, typeof response === 'object' ? response.body : response);
     Json.call(this);
 }
 
-function XhrResponse (url, options, response) {
-    this.url = url;
-    this.ok = options.ok || true;
-    this.status = options.status || 200;
-    this.statusText = options.statusText || statusCodes[this.status];
-    this.type = options.type || 'basic';
-    this.headers = options.headers || {};
-
-    Body.call(this, typeof response === 'object' ? response.body : response);
-    Json.call(this);
+function XhrResponse (options, response) {
+    this.status = response.status || options.status || 200;
+    this.headers = response.headers || options.headers || {};
+    this.body = typeof response === 'object' ? response.body : response;
 }
 
 function contains (obj, value) {
@@ -145,15 +143,15 @@ function createResponse (featherMockRequest, responseType, url, mocks, options) 
         }
 
         if (matchesRequest(mock.request || {}, request)) {
-            if (mock.response.timeout) {
+            if (mock.response && mock.response.timeout) {
                 mockResponse.timeout = mock.response.timeout;
-            } else if (mock.response.error) {
+            } else if (mock.response && mock.response.error) {
                 mockResponse.error = mock.response.error;
             } else {
                 if (responseType === 'fetch') {
-                    mockResponse.success = new FetchResponse(parsedUrl, options, mock.response);
+                    mockResponse.success = new FetchResponse(url, options, mock.response);
                 } else if (responseType === 'xhr') {
-                    mockResponse.success = new XhrResponse(parsedUrl, options, mock.response);
+                    mockResponse.success = new XhrResponse(options, mock.response || {});
                 }
             }
             matchFound = true;
