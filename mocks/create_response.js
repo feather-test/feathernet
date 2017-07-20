@@ -118,10 +118,6 @@ function matchesRequest (mock, request) {
     return matches;
 }
 
-function buildResponseObject () {
-
-}
-
 function createResponse (featherMockRequest, responseType, url, mocks, options) {
     let parsedUrl = new URL(url);
     let request = new Request(parsedUrl, options);

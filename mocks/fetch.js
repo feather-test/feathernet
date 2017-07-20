@@ -2,8 +2,13 @@ const createResponse = require('create_response');
 
 function createMockFetch (mocks) {
     let featherMockRequest = this;
-    return function mockFetch (url, options) {
+
+    function mockFetch (url, options) {
         options = options || {};
+        mockFetch.calls.push({
+            url: url,
+        });
+
         return new Promise(function (resolve, reject) {
             setTimeout(function () {
                 let mockResponse = createResponse(featherMockRequest, 'fetch', url, mocks, options);
@@ -15,6 +20,10 @@ function createMockFetch (mocks) {
             }, 1);
         });
     };
+
+    mockFetch.calls = [];
+
+    return mockFetch;
 }
 
 module.exports = createMockFetch;

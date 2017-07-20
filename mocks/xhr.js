@@ -5,7 +5,7 @@ const each = require('seebigs-each');
 function createMockXhr (mocks) {
     let featherMockRequest = this;
 
-    return function MockXhr () {
+    function MockXhr () {
         let responseHeaders = {};
         let options = {
             headers: {},
@@ -69,35 +69,45 @@ function createMockXhr (mocks) {
         this.send = function (body) {
             options.body = body;
 
-            this.readyState = 2; // HEADERS_RECEIVED
-            this.onreadystatechange();
+            let mockXhr = this;
 
-            this.readyState = 3; // LOADING
-            this.onreadystatechange();
-            this.onprogress();
+            MockXhr.calls.push({ url: mockXhr.responseUrl });
 
-            options.credentials = this.withCredentials;
-            let mockResponse = createResponse(featherMockRequest, 'xhr', this.responseUrl, mocks, options);
-            let mockSuccess = mockResponse.success;
-            if (mockSuccess) {
-                responseHeaders = mockSuccess.headers;
-                this.status = mockSuccess.status;
-                this.response = mockSuccess.body ? (typeof mockSuccess.body === 'string' ? mockSuccess.body : JSON.stringify(mockSuccess.body)) : '';
-            }
+            setTimeout(function () {
+                mockXhr.readyState = 2; // HEADERS_RECEIVED
+                mockXhr.onreadystatechange();
 
-            this.readyState = 4; // DONE
-            this.onreadystatechange();
+                mockXhr.readyState = 3; // LOADING
+                mockXhr.onreadystatechange();
+                mockXhr.onprogress();
 
-            if (mockSuccess) {
-                this.onload();
-            } else if (mockResponse.error) {
-                this.status = 400;
-                this.onerror(mockResponse.error);
-            } else if (mockResponse.timeout) {
-                this.ontimeout();
-            }
+                options.credentials = mockXhr.withCredentials;
+                let mockResponse = createResponse(featherMockRequest, 'xhr', mockXhr.responseUrl, mocks, options);
+                let mockSuccess = mockResponse.success;
+                if (mockSuccess) {
+                    responseHeaders = mockSuccess.headers;
+                    mockXhr.status = mockSuccess.status;
+                    mockXhr.response = mockSuccess.body ? (typeof mockSuccess.body === 'string' ? mockSuccess.body : JSON.stringify(mockSuccess.body)) : '';
+                }
+
+                mockXhr.readyState = 4; // DONE
+                mockXhr.onreadystatechange();
+
+                if (mockSuccess) {
+                    mockXhr.onload();
+                } else if (mockResponse.error) {
+                    mockXhr.status = 400;
+                    mockXhr.onerror(mockResponse.error);
+                } else if (mockResponse.timeout) {
+                    mockXhr.ontimeout();
+                }
+            }, 1);
         };
     };
+
+    MockXhr.calls = [];
+
+    return MockXhr;
 }
 
 module.exports = createMockXhr;

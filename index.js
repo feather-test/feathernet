@@ -49,14 +49,6 @@ let featherMockRequest = {
         mocks.splice(0);
     },
 
-    calls: function (url) {
-
-    },
-
-    clearCalls: function () {
-
-    },
-
     debug: function () {
         debugMode = true;
     },

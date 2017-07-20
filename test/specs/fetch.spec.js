@@ -1,5 +1,5 @@
 
-xdescribe('fetch', () => {
+describe('fetch', () => {
 
     describe('overrides in all environments', (expect) => {
         expect(window.fetch.name).toBe('mockFetch', 'browser');

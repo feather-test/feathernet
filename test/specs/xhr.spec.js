@@ -8,7 +8,7 @@ describe('xhr', () => {
 
     describe('intercepts xhr when installed', () => {
 
-        describe('has a default response', (expect) => {
+        describe('has a default response', (expect, done) => {
             let testUrl = 'http://noresponse.com';
 
             let r = new window.XMLHttpRequest();
@@ -21,39 +21,42 @@ describe('xhr', () => {
                     expect(r.response).toBe('', 'response');
                     expect(r.responseText).toBe('', 'responseText');
                     expect(r.responseType).toBe('', 'responseType');
+                    done();
                 }
             };
             r.open('GET', testUrl, true);
             r.send();
         });
 
-        describe('responds with json', (expect) => {
+        describe('responds with json', (expect, done) => {
             let testUrl = 'https://sub.example.com:3000/cars/ford?model=fusion&doors=4#hash';
             let r = new XMLHttpRequest();
             r.onreadystatechange = function () {
                 if (r.readyState === 4) {
                     expect(r.status).toBe(200, 'status');
                     expect(JSON.parse(r.responseText)).toBe({ name:'fusion' }, 'json');
+                    done();
                 }
             };
             r.open('GET', testUrl, true);
             r.send();
         });
 
-        describe('responds with text', (expect) => {
+        describe('responds with text', (expect, done) => {
             let testUrl = 'https://greetings.com/say/hello/?a=2&b=3';
             let r = new XMLHttpRequest();
             r.onreadystatechange = function () {
                 if (r.readyState === 4) {
                     expect(r.status).toBe(200, 'status');
                     expect(r.responseText).toBe('HELLO', 'text');
+                    done();
                 }
             };
             r.open('GET', testUrl, true);
             r.send();
         });
 
-        describe('responds with complex response mock', (expect) => {
+        describe('responds with complex response mock', (expect, done) => {
             let testUrl = 'http://complex.com/response';
             let r = new XMLHttpRequest();
             r.onreadystatechange = function () {
@@ -63,13 +66,14 @@ describe('xhr', () => {
                     expect(r.getAllResponseHeaders()).toBe('Allow-Access-Control-Origin: *\nContent-Encoding: gzip');
                     expect(r.getResponseHeader('Content-Encoding')).toBe('gzip');
                     expect(JSON.parse(r.responseText)).toBe({ name: 'fusion' });
+                    done();
                 }
             };
             r.open('GET', testUrl, true);
             r.send();
         });
 
-        describe('handles onerror', (expect) => {
+        describe('handles onerror', (expect, done) => {
             let testUrl = 'http://errors.com';
             let r = new XMLHttpRequest();
             r.onreadystatechange = function () {
@@ -82,11 +86,12 @@ describe('xhr', () => {
             r.open('GET', testUrl, true);
             r.onerror = function (e) {
                 expect(e).toBe('Ooops sorry');
+                done();
             };
             r.send();
         });
 
-        describe('handles ontimeout', (expect) => {
+        describe('handles ontimeout', (expect, done) => {
             let testUrl = 'http://timesup.com';
             let r = new XMLHttpRequest();
             r.onreadystatechange = function () {
@@ -99,11 +104,12 @@ describe('xhr', () => {
             r.open('GET', testUrl, true);
             r.ontimeout = function () {
                 expect(r.status).toBe(0);
+                done();
             };
             r.send();
         });
 
-        describe('handles loading events', (expect) => {
+        describe('handles loading events', (expect, done) => {
             let testUrl = 'https://greetings.com/say/hello/?a=2&b=3';
             let eventOrderActual = [];
             let eventOrderExpected = ['rdy1','rdy2','rdy3','progress','rdy4','load'];
@@ -118,9 +124,10 @@ describe('xhr', () => {
             };
             r.onload = function () {
                 eventOrderActual.push('load');
+                expect(eventOrderActual).toBe(eventOrderExpected);
+                done();
             };
             r.send();
-            expect(eventOrderActual).toBe(eventOrderExpected);
         });
 
     });
