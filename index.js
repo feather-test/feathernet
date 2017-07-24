@@ -1,6 +1,6 @@
 const createMockFetch = require('./mocks/fetch.js');
 const createMockXhr = require('./mocks/xhr.js');
-// const createMockSendBeacon = require('./mocks/sendBeacon.js');
+const createMockSendBeacon = require('./mocks/send_beacon.js');
 
 const _window = window || {};
 const _origWindowFetch = _window.fetch;
@@ -20,21 +20,33 @@ let featherMockRequest = {
         if (window) {
             window.fetch = createMockFetch.call(this, mocks);
             window.XMLHttpRequest = createMockXhr.call(this, mocks);
+            if (window.navigator) {
+                window.navigator.sendBeacon = createMockSendBeacon.call(this, mocks);
+            }
         }
         if (global) {
             global.fetch = createMockFetch.call(this, mocks);
             global.XMLHttpRequest = createMockXhr.call(this, mocks);
+            if (global.navigator) {
+                global.navigator.sendBeacon = createMockSendBeacon.call(this, mocks);
+            }
         }
     },
 
     uninstall: function () {
         if (window) {
-            window.fetch = _origFetch;
-            window.XMLHttpRequest = _origXhr;
+            window.fetch = _origWindowFetch;
+            window.XMLHttpRequest = _origWindowXhr;
+            if (window.navigator) {
+                window.navigator = _origWindowSendBeacon;
+            }
         }
         if (global) {
-            global.fetch = _origFetch;
-            global.XMLHttpRequest = _origXhr;
+            global.fetch = _origNodeFetch;
+            global.XMLHttpRequest = _origNodeXhr;
+            if (global.navigator) {
+                global.navigator = _origNodeSendBeacon;
+            }
         }
     },
 

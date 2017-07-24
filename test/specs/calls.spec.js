@@ -25,4 +25,12 @@ describe('calls', () => {
         expect(XMLHttpRequest.calls[2].url).toBe('https://greetings.com');
     });
 
+    describe('sendBeacon collects calls', (expect) => {
+        navigator.sendBeacon('http://noresponse.com');
+        navigator.sendBeacon('http://noresponse.com');
+        navigator.sendBeacon('https://greetings.com');
+
+        expect(navigator.sendBeacon.calls[2].url).toBe('https://greetings.com');
+    });
+
 });
