@@ -86,7 +86,7 @@ function matchesRequest (mock, request) {
     each(mock.exact, function (value, predicate) {
         if (typeof value === 'object') {
             each(value, function (v, k) {
-                if (!request[predicate] || !deepEqual(request[predicate][k], v)) {
+                if (!request[predicate] || !deepEqual(request[predicate][k], v, { strict: true })) {
                     matches = false;
                     return false; // drop out of loop
                 }
