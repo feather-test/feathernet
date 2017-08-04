@@ -1,4 +1,4 @@
-const createResponse = require('create_response');
+const createResponse = require('./create_response');
 
 function createMockFetch (mocks) {
     let featherMockRequest = this;

@@ -1,3 +1,6 @@
+
+require('fs');
+
 const FeatherTestBrowser = require('../../feather-test-browser');
 
 let mockTest = new FeatherTestBrowser({
