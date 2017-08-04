@@ -31,10 +31,20 @@ function Json () {
     }
 }
 
+function createHeaders (headers) {
+    headers = headers || {};
+
+    headers.get = function (name) {
+        return headers[name];
+    };
+
+    return headers;
+}
+
 function Request (url, options) {
     this.url = url;
     this.method = (options.method && options.method.toUpperCase()) || 'GET';
-    this.headers = options.headers || {};
+    this.headers = createHeaders(options.headers);
     this.body = options.body;
     this.mode = options.mode || 'cors';
     this.credentials = options.credentials || 'omit';
@@ -49,7 +59,7 @@ function FetchResponse (url, options, response) {
     this.ok = options.ok || true;
     this.status = response.status || options.status || 200;
     this.type = response.type || options.type || 'basic';
-    this.headers = response.headers || options.headers || {};
+    this.headers = createHeaders(response.headers || options.headers);
 
     Object.defineProperty(this, 'statusText', {
         get: function () { return statusCodes[this.status]; },
