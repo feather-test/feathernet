@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "deep-equal": "^1.0.1",
-    "seebigs-each": "^1.0.0",
-    "seebigs-utils": "^1.4.1"
+    "seebigs-each": "^1.0.0"
   }
 }
