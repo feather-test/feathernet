@@ -30,26 +30,26 @@ function constructConfig (config) {
 }
 
 function Feathernet (config) {
-    this.mocks = [];
-    this.config = constructConfig(config);
+    var mocks = [];
+    config = constructConfig(config);
 
     this.install = function () {
         if (window) {
-            window.fetch = createMockFetch.call(this, this.mocks);
-            window.XMLHttpRequest = createMockXhr.call(this, this.mocks);
+            window.fetch = createMockFetch.call(this, mocks);
+            window.XMLHttpRequest = createMockXhr.call(this, mocks);
             if (window.navigator) {
-                window.navigator.sendBeacon = createMockSendBeacon.call(this, this.mocks);
+                window.navigator.sendBeacon = createMockSendBeacon.call(this, mocks);
             }
         }
         if (global) {
-            global.fetch = createMockFetch.call(this, this.mocks);
-            global.XMLHttpRequest = createMockXhr.call(this, this.mocks);
+            global.fetch = createMockFetch.call(this, mocks);
+            global.XMLHttpRequest = createMockXhr.call(this, mocks);
             if (global.navigator) {
-                global.navigator.sendBeacon = createMockSendBeacon.call(this, this.mocks);
+                global.navigator.sendBeacon = createMockSendBeacon.call(this, mocks);
             }
         }
 
-        Node.prototype.appendChild = createMockAppendChild.call(this, _origAppendChild, this.mocks);
+        Node.prototype.appendChild = createMockAppendChild.call(this, _origAppendChild, mocks);
     };
 
     this.uninstall = function () {
@@ -72,25 +72,25 @@ function Feathernet (config) {
     };
 
     this.mock = function (request, response) {
-        this.mocks.push({
+        mocks.push({
             request: request || {},
             response: response || {}
         });
     };
 
     this.clearMocks = function () {
-        this.mocks.splice(0);
+        mocks.splice(0);
     };
 
     this.mockScript = function (request, fileLocation) {
-        this.mocks.push({
+        mocks.push({
             request: request || {},
             response: { file: fileLocation }
         });
     };
 
     this._debug = function (msg) {
-        if (this.config.debug) {
+        if (config.debug) {
             // console.log(typeof msg === 'string' ? msg : JSON.stringify(msg, null, 4));
         }
     };
