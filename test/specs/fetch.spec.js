@@ -17,7 +17,6 @@ describe('fetch', () => {
                             expect(response.url).toBe(testUrl, 'url');
                             expect(response.status).toBe(200, 'status');
                             expect(response.statusText).toBe('OK', 'statusText');
-                            expect(response.headers).toBe({}, 'headers');
                             expect(text).toBe(void 0, 'text');
                             done();
                         });
@@ -70,10 +69,8 @@ describe('fetch', () => {
                         response.json().then(function (json) {
                             expect(response.status).toBe(418, 'status');
                             expect(response.statusText).toBe("I'm a teapot", 'statusText');
-                            expect(response.headers).toBe({
-                                'Allow-Access-Control-Origin': '*',
-                                'Content-Encoding': 'gzip',
-                            }, 'headers');
+                            expect(response.headers.get('Allow-Access-Control-Origin')).toBe('*');
+                            expect(response.headers.get('Content-Encoding')).toBe('gzip');
                             expect(json).toBe({ name: 'fusion' });
                             done();
                         });
