@@ -25,7 +25,7 @@ function createMockAppendChild (origAppendChild, mocks) {
             }
 
         } else {
-            console.error('No URL!!!');
+            origAppendChild.call(targetElem, elem);
         }
     }
 
