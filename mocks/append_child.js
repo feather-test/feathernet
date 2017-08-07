@@ -24,8 +24,6 @@ function createMockAppendChild (origAppendChild, mocks) {
                 }
             }
 
-            console.log('I am going to append something!');
-
         } else {
             console.error('No URL!!!');
         }

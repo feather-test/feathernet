@@ -1,6 +1,6 @@
 {
   "name": "feather-mock-request",
-  "version": "1.0.1",
+  "version": "0.2.0",
   "description": "Intercept javascript requests of all types and mock responses",
   "main": "index.js",
   "scripts": {

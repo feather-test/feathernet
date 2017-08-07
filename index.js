@@ -2,7 +2,6 @@ const createMockAppendChild = require('./mocks/append_child.js');
 const createMockFetch = require('./mocks/fetch.js');
 const createMockXhr = require('./mocks/xhr.js');
 const createMockSendBeacon = require('./mocks/send_beacon.js');
-// const utils = require('seebigs-utils');
 
 const _window = window || {};
 const _origWindowFetch = _window.fetch;
