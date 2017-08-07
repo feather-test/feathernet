@@ -5,6 +5,8 @@ featherMockRequest.install();
 
 featherMockRequest.mock('http://noresponse.com');
 
+featherMockRequest.mockScript('/someJavascript.js', __dirname + '/../fixtures/someJavascript.js');
+
 featherMockRequest.mock('http://errors.com', { error: 'Ooops sorry' });
 
 featherMockRequest.mock('http://timesup.com', { timeout: 1000 });
