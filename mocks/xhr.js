@@ -2,7 +2,7 @@ const createResponse = require('./create_response.js');
 const statusCodes = require('./status_codes.js');
 const each = require('seebigs-each');
 
-function createMockXhr (mocks) {
+function createMockXhr (mocks, config) {
     let feathernet = this;
 
     function MockXhr () {
@@ -82,7 +82,7 @@ function createMockXhr (mocks) {
                 mockXhr.onprogress();
 
                 options.credentials = mockXhr.withCredentials;
-                let mockResponse = createResponse(feathernet, 'xhr', mockXhr.responseUrl, mocks, options);
+                let mockResponse = createResponse(feathernet, 'xhr', mockXhr.responseUrl, mocks, options, config);
                 let mockSuccess = mockResponse.success;
                 if (mockSuccess) {
                     responseHeaders = mockSuccess.headers;

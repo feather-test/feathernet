@@ -1,2 +1,5 @@
 Better interface?
-https://www.npmjs.com/package/mocked-backend
+    https://www.npmjs.com/package/mocked-backend
+
+Missing network activity in debug inspector. This is a problem.
+    Let's have each request go through the Node server anyways so that we get the tracking

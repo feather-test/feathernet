@@ -9,7 +9,7 @@ describe('fetch', () => {
     describe('intercepts fetch when installed', () => {
 
         describe('has a default response', (expect, done) => {
-            let testUrl = 'http://noresponse.com';
+            let testUrl = 'http://noresponse.com/';
             fetch(testUrl)
                 .then((response) => {
                     if (response && response.ok) {

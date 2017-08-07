@@ -13,6 +13,13 @@ const _origNodeFetch = _global.fetch;
 const _origNodeXhr = _global.XMLHttpRequest;
 const _origNodeSendBeacon = _global.navigator && _global.navigator.sendBeacon;
 
+const logLevels = {
+    'QUIET': 0,
+    'ERROR': 1,
+    'WARN': 2,
+    'INFO': 3,
+};
+
 /* Exposed for debugging while in Chrome */
 _window._origWindowFetch = _origWindowFetch;
 _window._origWindowXhr = _origWindowXhr;
@@ -22,7 +29,7 @@ function constructConfig (config) {
     config = config || {};
 
     var defaultConfig = {
-        server: 'localhost:9005',
+        server: 'http://localhost:9005',
         debug: false
     };
 
@@ -35,21 +42,21 @@ function Feathernet (config) {
 
     this.install = function () {
         if (window) {
-            window.fetch = createMockFetch.call(this, mocks);
-            window.XMLHttpRequest = createMockXhr.call(this, mocks);
+            window.fetch = createMockFetch.call(this, mocks, config);
+            window.XMLHttpRequest = createMockXhr.call(this, mocks, config);
             if (window.navigator) {
-                window.navigator.sendBeacon = createMockSendBeacon.call(this, mocks);
+                window.navigator.sendBeacon = createMockSendBeacon.call(this, mocks, config);
             }
         }
         if (global) {
-            global.fetch = createMockFetch.call(this, mocks);
-            global.XMLHttpRequest = createMockXhr.call(this, mocks);
+            global.fetch = createMockFetch.call(this, mocks, config);
+            global.XMLHttpRequest = createMockXhr.call(this, mocks, config);
             if (global.navigator) {
-                global.navigator.sendBeacon = createMockSendBeacon.call(this, mocks);
+                global.navigator.sendBeacon = createMockSendBeacon.call(this, mocks, config);
             }
         }
 
-        Node.prototype.appendChild = createMockAppendChild.call(this, _origAppendChild, mocks);
+        Node.prototype.appendChild = createMockAppendChild.call(this, _origAppendChild, mocks, config);
     };
 
     this.uninstall = function () {
@@ -89,9 +96,15 @@ function Feathernet (config) {
         });
     };
 
-    this._debug = function (msg) {
-        if (config.debug) {
-            // console.log(typeof msg === 'string' ? msg : JSON.stringify(msg, null, 4));
+    this._log = function (type, msg) {
+        let logLevel = logLevels[config.log];
+        if (typeof logLevel === 'undefined') {
+            logLevel = 1;
+        }
+
+        let msgLevel = logLevels[type];
+        if (msgLevel <= logLevel) {
+            console.log(typeof msg === 'string' ? msg : JSON.stringify(msg, null, 4));
         }
     };
 }

@@ -1,6 +1,6 @@
 const createResponse = require('./create_response');
 
-function createMockFetch (mocks) {
+function createMockFetch (mocks, config) {
     let feathernet = this;
 
     function mockFetch (url, options) {
@@ -11,7 +11,7 @@ function createMockFetch (mocks) {
 
         return new Promise(function (resolve, reject) {
             setTimeout(function () {
-                let mockResponse = createResponse(feathernet, 'fetch', url, mocks, options);
+                let mockResponse = createResponse(feathernet, 'fetch', url, mocks, options, config);
                 if (mockResponse.success) {
                     resolve(mockResponse.success);
                 } else {

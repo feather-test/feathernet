@@ -1,6 +1,6 @@
 const createResponse = require('./create_response.js');
 
-function createMockAppendChild (origAppendChild, mocks) {
+function createMockAppendChild (origAppendChild, mocks, config) {
     let feathernet = this;
 
     function mockAppendChild (elem) {
@@ -14,7 +14,7 @@ function createMockAppendChild (origAppendChild, mocks) {
 
             let targetElem = this;
 
-            let mockResponse = createResponse(feathernet, 'file', url, mocks);
+            let mockResponse = createResponse(feathernet, 'file', url, mocks, null, config);
             if (mockResponse.success) {
                 elem.src = mockResponse.success.newSrc;
                 origAppendChild.call(targetElem, elem);

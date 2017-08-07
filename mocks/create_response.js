@@ -7,14 +7,13 @@ const Request = require('../lib/request.js');
 const statusCodes = require('./status_codes.js');
 const URL = require('../utils/url.js');
 
-function AppendChildResponse (url, mock) {
-    this.url = url;
-    this.file = mock.response.file;
-    this.newSrc = 'http://localhost:9005' + this.file;
+function AppendChildResponse (parsedUrl, mock, config) {
+    this.url = parsedUrl.href;
+    this.newSrc = mock.response.file ? config.server + '/' + mock.response.file : '';
 }
 
-function FetchResponse (url, options, response) {
-    this.url = url;
+function FetchResponse (parsedUrl, options, response) {
+    this.url = parsedUrl.href;
     this.ok = options.ok || true;
     this.status = response.status || options.status || 200;
     this.type = response.type || options.type || 'basic';
@@ -35,12 +34,12 @@ function XhrResponse (options, response) {
     this.body = typeof response === 'object' ? response.body : response;
 }
 
-function createResponse (feathernet, responseType, url, mocks, options) {
+function createResponse (feathernet, responseType, url, mocks, options, config) {
     let parsedUrl = new URL(url);
     let request = new Request(parsedUrl, options);
     let mockResponse = {};
 
-    let debug = feathernet._debug;
+    let log = feathernet._log;
     let matchFound = false;
     let unmatchedMocks = [];
 
@@ -62,11 +61,11 @@ function createResponse (feathernet, responseType, url, mocks, options) {
                 mockResponse.error = mock.response.error;
             } else {
                 if (responseType === 'fetch') {
-                    mockResponse.success = new FetchResponse(url, options, mock.response);
+                    mockResponse.success = new FetchResponse(parsedUrl, options, mock.response);
                 } else if (responseType === 'xhr') {
                     mockResponse.success = new XhrResponse(options, mock.response || {});
                 } else if (responseType === 'file') {
-                    mockResponse.success = new AppendChildResponse(url, mock);
+                    mockResponse.success = new AppendChildResponse(parsedUrl, mock, config);
                 }
             }
             matchFound = true;
@@ -76,12 +75,15 @@ function createResponse (feathernet, responseType, url, mocks, options) {
         }
     });
 
-    if (!matchFound && unmatchedMocks.length) {
-        debug('\n===\nRequest');
-        debug(request);
+    if (matchFound) {
+        log('INFO', mockResponse);
+
+    } else if (unmatchedMocks.length) {
+        log('ERROR', '\n===\nRequest');
+        log('ERROR', request);
         unmatchedMocks.forEach(function (unMock) {
-            debug('\nDoes not match');
-            debug(unMock);
+            log('ERROR', '\nDoes not match');
+            log('ERROR', unMock);
         });
     }
 

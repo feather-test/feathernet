@@ -1,5 +1,5 @@
 const Feathernet = require('../../index.js');
-const feathernet = new Feathernet({ debug: true });
+const feathernet = new Feathernet();
 
 feathernet.install();
 
