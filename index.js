@@ -29,7 +29,7 @@ function constructConfig (config) {
     return Object.assign({}, defaultConfig, config);
 }
 
-function FeatherMockRequest (config) {
+function Feathernet (config) {
     this.mocks = [];
     this.config = constructConfig(config);
 
@@ -96,4 +96,4 @@ function FeatherMockRequest (config) {
     };
 }
 
-module.exports = FeatherMockRequest;
+module.exports = Feathernet;

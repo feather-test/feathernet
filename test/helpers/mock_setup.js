@@ -1,19 +1,19 @@
-const FeatherMockRequest = require('../../index.js');
-const featherMockRequest = new FeatherMockRequest({ debug: true });
+const Feathernet = require('../../index.js');
+const feathernet = new Feathernet({ debug: true });
 
-featherMockRequest.install();
+feathernet.install();
 
-featherMockRequest.mock('http://noresponse.com');
+feathernet.mock('http://noresponse.com');
 
-featherMockRequest.mockScript('/someJavascript.js', __dirname + '/../fixtures/someJavascript.js');
+feathernet.mockScript('/someJavascript.js', __dirname + '/../fixtures/someJavascript.js');
 
-featherMockRequest.mock('http://errors.com', { error: 'Ooops sorry' });
+feathernet.mock('http://errors.com', { error: 'Ooops sorry' });
 
-featherMockRequest.mock('http://timesup.com', { timeout: 1000 });
+feathernet.mock('http://timesup.com', { timeout: 1000 });
 
-featherMockRequest.mock('https://greetings.com', 'HELLO');
+feathernet.mock('https://greetings.com', 'HELLO');
 
-featherMockRequest.mock('http://complex.com/response', {
+feathernet.mock('http://complex.com/response', {
     status: 418,
     headers: {
         'Allow-Access-Control-Origin': '*',
@@ -22,7 +22,7 @@ featherMockRequest.mock('http://complex.com/response', {
     body: { name: 'fusion' },
 });
 
-featherMockRequest.mock({
+feathernet.mock({
     exact: {
         method: 'GET',
         credentials: 'omit',

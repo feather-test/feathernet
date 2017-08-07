@@ -35,12 +35,12 @@ function XhrResponse (options, response) {
     this.body = typeof response === 'object' ? response.body : response;
 }
 
-function createResponse (featherMockRequest, responseType, url, mocks, options) {
+function createResponse (feathernet, responseType, url, mocks, options) {
     let parsedUrl = new URL(url);
     let request = new Request(parsedUrl, options);
     let mockResponse = {};
 
-    let debug = featherMockRequest._debug;
+    let debug = feathernet._debug;
     let matchFound = false;
     let unmatchedMocks = [];
 

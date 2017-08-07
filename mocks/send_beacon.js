@@ -1,6 +1,6 @@
 
 function createMockSendBeacon () {
-    let featherMockRequest = this;
+    let feathernet = this;
 
     function mockSendBeacon (url, data) {
         mockSendBeacon.calls.push({
