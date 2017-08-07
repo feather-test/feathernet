@@ -1,8 +1,7 @@
-const featherMockRequest = require('../../index.js');
+const FeatherMockRequest = require('../../index.js');
+const featherMockRequest = new FeatherMockRequest({ debug: true });
 
 featherMockRequest.install();
-
-featherMockRequest.debug();
 
 featherMockRequest.mock('http://noresponse.com');
 
