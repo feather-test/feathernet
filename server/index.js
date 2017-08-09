@@ -1,4 +1,5 @@
-const server = require('./server.js');
+const requestHandler = require('./requestHandler');
+const serverApps = require('./serverApps');
 
 function FeatherNetServer (inputConfig) {
     const defaultConfig = {
@@ -15,17 +16,25 @@ function FeatherNetServer (inputConfig) {
     let featherServer = {
         admin: null,
         adminConnection: null,
-        app: null,
-        appConnection: null,
+        impostor: null,
+        impostorConnection: null,
         mocks: [],
-        request: function () {
-
-        },
+        requestHandler: requestHandler,
     };
 
-    server.create(featherServer, config.server);
+    serverApps.create(featherServer, config.server);
 
     this.mock = function (request, response) {
+        if (typeof request === 'string') {
+            request = {
+                contains: {
+                    url: {
+                        href: request,
+                    },
+                },
+            };
+        }
+
         mocks.push({
             request: request || {},
             response: response || {},
@@ -37,11 +46,11 @@ function FeatherNetServer (inputConfig) {
     };
 
     this.start = function () {
-        server.start(featherServer);
+        serverApps.start(featherServer);
     };
 
     this.stop = function () {
-        server.stop(featherServer);
+        serverApps.stop(featherServer);
     };
 }
 

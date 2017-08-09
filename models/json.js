@@ -1,4 +1,3 @@
-
 function Json () {
     this.json = function() {
         return this.text().then(function (text) {

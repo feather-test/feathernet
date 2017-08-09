@@ -14,10 +14,9 @@ describe('fetch', () => {
                 .then((response) => {
                     if (response && response.ok) {
                         response.text().then(function (text) {
-                            expect(response.url).toBe(testUrl, 'url');
                             expect(response.status).toBe(200, 'status');
                             expect(response.statusText).toBe('OK', 'statusText');
-                            expect(text).toBe(void 0, 'text');
+                            expect(text).toBe('', 'text');
                             done();
                         });
                     } else {
@@ -27,31 +26,14 @@ describe('fetch', () => {
                 });
         });
 
-        describe('responds with json', (expect, done) => {
-            let testUrl = 'https://sub.example.com:3000/cars/ford?model=fusion&doors=4#hash';
-            window.fetch(testUrl)
-                .then((response) => {
-                    if (response && response.ok) {
-                        response.json().then(function (json) {
-                            expect(response.status).toBe(200, 'status');
-                            expect(json).toBe({ name: 'fusion' });
-                            done();
-                        });
-                    } else {
-                        expect('response from ' + testUrl).toBe('ok with valid json');
-                        done();
-                    }
-                });
-        });
-
         describe('responds with text', (expect, done) => {
-            let testUrl = 'https://greetings.com/say/hello/?a=2&b=3';
+            let testUrl = 'http://greetings.com/say/hello?a=2&b=3';
             window.fetch(testUrl)
                 .then((response) => {
                     if (response && response.ok) {
                         response.text().then(function (text) {
                             expect(response.status).toBe(200, 'status');
-                            expect(text).toBe('HELLO');
+                            expect(text).toBe('hello');
                             done();
                         });
                     } else {
@@ -67,10 +49,26 @@ describe('fetch', () => {
                 .then((response) => {
                     if (response && response.ok) {
                         response.json().then(function (json) {
-                            expect(response.status).toBe(418, 'status');
-                            expect(response.statusText).toBe("I'm a teapot", 'statusText');
-                            expect(response.headers.get('Allow-Access-Control-Origin')).toBe('*');
-                            expect(response.headers.get('Content-Encoding')).toBe('gzip');
+                            expect(response.status).toBe(202, 'status');
+                            expect(response.statusText).toBe("Accepted", 'statusText');
+                            expect(response.headers.get('X-Custom-Header-Stuff')).toBe('foobar');
+                            expect(json).toBe({ name: 'fusion' });
+                            done();
+                        });
+                    } else {
+                        expect('response from ' + testUrl).toBe('ok with valid json');
+                        done();
+                    }
+                });
+        });
+
+        describe('responds to complex request matcher with json', (expect, done) => {
+            let testUrl = 'http://sub.example.com:3000/cars/ford?model=fusion&doors=4';
+            window.fetch(testUrl)
+                .then((response) => {
+                    if (response && response.ok) {
+                        response.json().then(function (json) {
+                            expect(response.status).toBe(200, 'status');
                             expect(json).toBe({ name: 'fusion' });
                             done();
                         });
@@ -85,24 +83,19 @@ describe('fetch', () => {
             let testUrl = 'http://errors.com';
             window.fetch(testUrl)
                 .then((response) => {
-                    expect('response from ' + testUrl).toBe('an error');
-                    done();
-                })
-                .catch(function (err) {
-                    expect(err).toBe('Ooops sorry');
+                    expect(response.ok).toBe(false);
                     done();
                 });
         });
 
-        describe('handles timeout', (expect, done) => {
-            let testUrl = 'http://timesup.com';
-            window.fetch(testUrl)
+        describe('handles failure', (expect, done) => {
+            window.fetch()
                 .then((response) => {
-                    expect('response from ' + testUrl).toBe('a timeout');
+                    expect('response from ' + testUrl).toBe('an error');
                     done();
                 })
-                .catch(function (timeout) {
-                    expect(timeout).toBe(1000);
+                .catch(function (err) {
+                    expect(Object.prototype.toString.call(err)).toBe('[object Error]');
                     done();
                 });
         });

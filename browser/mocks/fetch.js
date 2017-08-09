@@ -3,13 +3,14 @@ const URL = require('../../utils/url');
 function createMockFetch (origFetch, config) {
     function mockFetch (url, options) {
         options = options || {};
-        url = new URL(url);
 
-        mockFetch.calls.push(url);
+        let mockedUrl = '';
+        if (url) {
+            mockedUrl = `http://${config.hostOverride}/${url}`;
+            mockFetch.calls.push(url);
+        }
 
-        url.host = config.hostOverride;
-
-        return origFetch.call(this, url.href, options);
+        return origFetch.call(this, mockedUrl, options);
     };
 
     mockFetch.calls = [];

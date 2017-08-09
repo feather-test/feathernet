@@ -11,9 +11,9 @@ const FeatherTestBrowser = require('../../feather-test-browser');
 
 let mockTest = new FeatherTestBrowser({
     helpers: [
-        // './helpers/mock_setup.js',
+        './helpers/mock_setup.js',
     ],
-    specs: './specs/new.js',
+    specs: './specs/xhr.spec.js',
     exitProcessWhenFailing: false,
 });
 

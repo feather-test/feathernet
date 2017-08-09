@@ -1,54 +1,63 @@
-const Feathernet = require('../../index.js');
-const feathernet = new Feathernet();
-
-feathernet.install();
-
-feathernet.mock('http://noresponse.com');
-
-feathernet.mockScript('/someJavascript.js', __dirname + '/../fixtures/someJavascript.js');
-
-feathernet.mock('http://errors.com', { error: 'Ooops sorry' });
-
-feathernet.mock('http://timesup.com', { timeout: 1000 });
-
-feathernet.mock('https://greetings.com', 'HELLO');
-
-feathernet.mock('http://complex.com/response', {
-    status: 418,
-    headers: {
-        'Allow-Access-Control-Origin': '*',
-        'Content-Encoding': 'gzip',
-    },
-    body: { name: 'fusion' },
+const FeatherNetBrowser = require('../../browser');
+const featherNet = new FeatherNetBrowser({
+    hostOverride: 'localhost:9876',
 });
 
-feathernet.mock({
-    exact: {
-        method: 'GET',
-        credentials: 'omit',
-        headers: {},
-        url: {
-            protocol: 'https:',
-            host: 'sub.example.com:3000',
-            hostname: 'sub.example.com',
-            port: '3000',
-            pathname: '/cars/ford',
-            hash: '#hash',
-            params: {
-                model: 'fusion',
-                doors: '4',
+featherNet.addMocks([
+    {
+        request: 'http://noresponse.com'
+    },
+    {
+        request: 'http://errors.com',
+        response: {
+            status: 500,
+        }
+    },
+    {
+        request: 'http://greetings.com',
+        response: 'hello',
+    },
+    {
+        request: 'http://complex.com/response',
+        response: {
+            status: 202,
+            headers: {
+                'X-Custom-Header-Stuff': 'foobar',
             },
+            body: { name: 'fusion' },
         },
     },
-    contains: {
-        method: 'ET',
-        url: {
-            host: 'ample',
-            params: {
-                model: 'fusion',
+    {
+        request: {
+            exact: {
+                method: 'GET',
+                headers: {},
+                url: {
+                    protocol: 'http:',
+                    host: 'sub.example.com:3000',
+                    hostname: 'sub.example.com',
+                    port: '3000',
+                    pathname: '/cars/ford',
+                    params: {
+                        model: 'fusion',
+                        doors: '4',
+                    },
+                },
+            },
+            contains: {
+                method: 'ET',
+                url: {
+                    host: 'ample',
+                    params: {
+                        model: 'fusion',
+                    },
+                },
             },
         },
+        response: {
+            body: { name: 'fusion' },
+        },
     },
-}, {
-    body: { name: 'fusion' },
-});
+]);
+
+featherNet.install();

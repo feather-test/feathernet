@@ -1,6 +1,6 @@
 // const createMockAppendChild = require('./mocks/appendChild');
 const createMockFetch = require('./mocks/fetch');
-// const createMockXhr = require('./mocks/xhr');
+const createMockXhr = require('./mocks/xhr');
 // const createMockSendBeacon = require('./mocks/sendBeacon');
 
 const _window = typeof window === 'undefined' ? {} : window;
@@ -24,14 +24,14 @@ function FeatherNetBrowser (config) {
         // Node.prototype.appendChild = createMockAppendChild.call(this, _origAppendChild, mocks, config);
         if (window) {
             window.fetch = createMockFetch(_origWindowFetch, config);
-            // window.XMLHttpRequest = createMockXhr.call(this, mocks, config);
+            window.XMLHttpRequest = createMockXhr(_origWindowXhr, config);
             // if (window.navigator) {
             //     window.navigator.sendBeacon = createMockSendBeacon.call(this, mocks, config);
             // }
         }
         if (global) {
             global.fetch = createMockFetch(_origNodeFetch, config);
-            // global.XMLHttpRequest = createMockXhr.call(this, mocks, config);
+            global.XMLHttpRequest = createMockXhr(_origNodeXhr, config);
             // if (global.navigator) {
             //     global.navigator.sendBeacon = createMockSendBeacon.call(this, mocks, config);
             // }
@@ -42,22 +42,29 @@ function FeatherNetBrowser (config) {
         // Node.prototype.appendChild = _origAppendChild;
         if (window) {
             window.fetch = _origWindowFetch;
-            // window.XMLHttpRequest = _origWindowXhr;
+            window.XMLHttpRequest = _origWindowXhr;
             // if (window.navigator) {
             //     window.navigator = _origWindowSendBeacon;
             // }
         }
         if (global) {
             global.fetch = _origNodeFetch;
-            // global.XMLHttpRequest = _origNodeXhr;
+            global.XMLHttpRequest = _origNodeXhr;
             // if (global.navigator) {
             //     global.navigator = _origNodeSendBeacon;
             // }
         }
     };
 
-    this.mock = function (request, response) {
-        (_origWindowFetch || _origNodeFetch)('http://localhost:9877/feathernet-mock', { method: 'post' });
+    this.addMocks = function (mocks) {
+        var options = {
+            method: 'post',
+            headers: {
+                'Content-Type': 'text/plain',
+            },
+            body: JSON.stringify(mocks),
+        };
+        (_origWindowFetch || _origNodeFetch)('http://localhost:9877/feathernet-addMocks', options);
     };
 
     this.clearMocks = function () {
