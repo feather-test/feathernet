@@ -78,17 +78,19 @@ function URL (initString, initParams) {
 
             return params.length ? '?' + params.join('&') : '';
         },
-        set: setParamsFromString
+        set: setParamsFromString,
+        enumerable: true,
     });
 
     Object.defineProperty(this, 'href', {
         get: function () {
             return this.protocol + '//' + this.host + this.pathname + this.search + this.hash;
         },
-        set: setUrlFromString
+        set: setUrlFromString,
+        enumerable: true,
     });
 
-    setUrlFromString.call(this, initString);
+    setUrlFromString.call(this, initString || '');
 }
 
 module.exports = URL;

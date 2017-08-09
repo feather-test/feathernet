@@ -1,4 +1,3 @@
-
 function Body (body) {
     let bodyText = '';
 

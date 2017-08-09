@@ -16,7 +16,12 @@
     "url": "https://github.com/seebigs/feathernet/issues"
   },
   "dependencies": {
+    "body-parser": "^1.17.2",
     "deep-equal": "^1.0.1",
-    "seebigs-each": "^1.0.0"
+    "express": "^4.15.4",
+    "seebigs-each": "^1.0.1"
+  },
+  "devDependencies": {
+    "feather-test-browser": "^1.2.1"
   }
 }
