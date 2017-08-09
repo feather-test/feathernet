@@ -1,4 +1,3 @@
-const URL = require('../../utils/url');
 
 function createMockXhr (origXhr, config) {
 

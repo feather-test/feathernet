@@ -1,13 +1,14 @@
-// const createMockAppendChild = require('./mocks/appendChild');
+const createMockAppendChild = require('./mocks/appendChild');
 const createMockFetch = require('./mocks/fetch');
+const createMockSendBeacon = require('./mocks/sendBeacon');
 const createMockXhr = require('./mocks/xhr');
-// const createMockSendBeacon = require('./mocks/sendBeacon');
 
 const _window = typeof window === 'undefined' ? {} : window;
 const _origWindowFetch = _window.fetch;
 const _origWindowXhr = _window.XMLHttpRequest;
 const _origWindowSendBeacon = _window.navigator && _window.navigator.sendBeacon;
 const _origAppendChild = Node.prototype.appendChild;
+
 const _global = typeof global === 'undefined' ? {} : global;
 const _origNodeFetch = _global.fetch;
 const _origNodeXhr = _global.XMLHttpRequest;
@@ -21,38 +22,38 @@ _window._origAppendChild = _origAppendChild;
 function FeatherNetBrowser (config) {
 
     this.install = function () {
-        // Node.prototype.appendChild = createMockAppendChild.call(this, _origAppendChild, mocks, config);
+        Node.prototype.appendChild = createMockAppendChild(_origAppendChild, config);
         if (window) {
             window.fetch = createMockFetch(_origWindowFetch, config);
             window.XMLHttpRequest = createMockXhr(_origWindowXhr, config);
-            // if (window.navigator) {
-            //     window.navigator.sendBeacon = createMockSendBeacon.call(this, mocks, config);
-            // }
+            if (window.navigator) {
+                window.navigator.sendBeacon = createMockSendBeacon(_origWindowSendBeacon, config);
+            }
         }
         if (global) {
             global.fetch = createMockFetch(_origNodeFetch, config);
             global.XMLHttpRequest = createMockXhr(_origNodeXhr, config);
-            // if (global.navigator) {
-            //     global.navigator.sendBeacon = createMockSendBeacon.call(this, mocks, config);
-            // }
+            if (global.navigator) {
+                global.navigator.sendBeacon = createMockSendBeacon(_origNodeSendBeacon, config);
+            }
         }
     };
 
     this.uninstall = function () {
-        // Node.prototype.appendChild = _origAppendChild;
+        Node.prototype.appendChild = _origAppendChild;
         if (window) {
             window.fetch = _origWindowFetch;
             window.XMLHttpRequest = _origWindowXhr;
-            // if (window.navigator) {
-            //     window.navigator = _origWindowSendBeacon;
-            // }
+            if (window.navigator) {
+                window.navigator = _origWindowSendBeacon;
+            }
         }
         if (global) {
             global.fetch = _origNodeFetch;
             global.XMLHttpRequest = _origNodeXhr;
-            // if (global.navigator) {
-            //     global.navigator = _origNodeSendBeacon;
-            // }
+            if (global.navigator) {
+                global.navigator = _origNodeSendBeacon;
+            }
         }
     };
 

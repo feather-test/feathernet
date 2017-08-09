@@ -7,7 +7,7 @@ const featherNet = new FeatherNetServer({
 
 featherNet.start();
 
-const FeatherTestBrowser = require('../../feather-test-browser');
+const FeatherTestBrowser = require('feather-test-browser');
 
 let mockTest = new FeatherTestBrowser({
     helpers: [

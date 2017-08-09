@@ -26,50 +26,50 @@ describe('xhr', () => {
             r.send();
         });
 
-        describe('responds with text', (expect, done) => {
-            let testUrl = 'http://greetings.com/say/hello?a=2&b=3';
-            let r = new XMLHttpRequest();
-            r.onreadystatechange = function () {
-                if (r.readyState === 4) {
-                    expect(r.status).toBe(200, 'status');
-                    expect(r.responseText).toBe('hello', 'text');
-                    done();
-                }
-            };
-            r.open('GET', testUrl, true);
-            r.send();
-        });
-
-        describe('responds with complex response mock', (expect, done) => {
-            let testUrl = 'http://complex.com/response';
-            let r = new XMLHttpRequest();
-            r.onreadystatechange = function () {
-                if (r.readyState === 4) {
-                    expect(r.status).toBe(202);
-                    expect(r.statusText).toBe('Accepted');
-                    expect(r.getAllResponseHeaders()).toContain('X-Custom-Header-Stuff: foobar');
-                    expect(r.getResponseHeader('X-Custom-Header-Stuff')).toBe('foobar');
-                    expect(JSON.parse(r.responseText)).toBe({ name: 'fusion' });
-                    done();
-                }
-            };
-            r.open('GET', testUrl, true);
-            r.send();
-        });
-
-        describe('responds with json', (expect, done) => {
-            let testUrl = 'http://sub.example.com:3000/cars/ford?model=fusion&doors=4';
-            let r = new XMLHttpRequest();
-            r.onreadystatechange = function () {
-                if (r.readyState === 4) {
-                    expect(r.status).toBe(200, 'status');
-                    expect(JSON.parse(r.responseText)).toBe({ name:'fusion' }, 'json');
-                    done();
-                }
-            };
-            r.open('GET', testUrl, true);
-            r.send();
-        });
+        // describe('responds with text', (expect, done) => {
+        //     let testUrl = 'http://greetings.com/say/hello?a=2&b=3';
+        //     let r = new XMLHttpRequest();
+        //     r.onreadystatechange = function () {
+        //         if (r.readyState === 4) {
+        //             expect(r.status).toBe(200, 'status');
+        //             expect(r.responseText).toBe('hello', 'text');
+        //             done();
+        //         }
+        //     };
+        //     r.open('GET', testUrl, true);
+        //     r.send();
+        // });
+        //
+        // describe('responds with complex response mock', (expect, done) => {
+        //     let testUrl = 'http://complex.com/response';
+        //     let r = new XMLHttpRequest();
+        //     r.onreadystatechange = function () {
+        //         if (r.readyState === 4) {
+        //             expect(r.status).toBe(202);
+        //             expect(r.statusText).toBe('Accepted');
+        //             expect(r.getAllResponseHeaders()).toContain('X-Custom-Header-Stuff: foobar');
+        //             expect(r.getResponseHeader('X-Custom-Header-Stuff')).toBe('foobar');
+        //             expect(JSON.parse(r.responseText)).toBe({ name: 'fusion' });
+        //             done();
+        //         }
+        //     };
+        //     r.open('GET', testUrl, true);
+        //     r.send();
+        // });
+        //
+        // describe('responds with json', (expect, done) => {
+        //     let testUrl = 'http://sub.example.com:3000/cars/ford?model=fusion&doors=4';
+        //     let r = new XMLHttpRequest();
+        //     r.onreadystatechange = function () {
+        //         if (r.readyState === 4) {
+        //             expect(r.status).toBe(200, 'status');
+        //             expect(JSON.parse(r.responseText)).toBe({ name:'fusion' }, 'json');
+        //             done();
+        //         }
+        //     };
+        //     r.open('GET', testUrl, true);
+        //     r.send();
+        // });
 
     });
 

@@ -58,6 +58,12 @@ featherNet.addMocks([
             body: { name: 'fusion' },
         },
     },
+    {
+        request: '/javascripts/somefile.js',
+        response: {
+            file: __dirname + '/../fixtures/somefile.js',
+        }
+    },
 ]);
 
 featherNet.install();

@@ -94,6 +94,8 @@ function createImpostor (featherServer, serverOptions) {
             res.set('Access-Control-Expose-Headers', Object.keys(responsePlan.headers).join());
         }
 
+        console.log(res.get());
+
         if (responsePlan.file) {
             res.sendFile(path.resolve(responsePlan.file));
         } else {
