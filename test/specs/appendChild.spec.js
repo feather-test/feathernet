@@ -1,10 +1,10 @@
 
 describe('appendChild', () => {
 
-    // describe('overrides in all environments', (expect) => {
-    //     expect(window.navigator.sendBeacon.name).toBe('mockSendBeacon', 'browser');
-    //     expect(navigator.sendBeacon.name).toBe('mockSendBeacon', 'node');
-    // });
+    describe('overrides in all environments', (expect) => {
+        expect(window.navigator.sendBeacon.name).toBe('mockSendBeacon', 'browser');
+        expect(navigator.sendBeacon.name).toBe('mockSendBeacon', 'node');
+    });
 
     describe('appends a normal div to the dom', (expect) => {
         let div = document.createElement('div');

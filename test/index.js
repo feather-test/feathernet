@@ -13,8 +13,11 @@ let mockTest = new FeatherTestBrowser({
     helpers: [
         './helpers/mock_setup.js',
     ],
-    specs: './specs/xhr.spec.js',
+    specs: './specs',
     exitProcessWhenFailing: false,
+    nodeAsBrowser: {
+        url: 'http://localhost/',
+    }
 });
 
 mockTest.run();

@@ -6,10 +6,15 @@ function createMockXhr (origXhr, config) {
         let urlToOpen = url;
         if (!this._urlMocked) {
             this._urlMocked = true;
+            origXhr.calls.push({
+                url: url,
+            });
             urlToOpen = `http://${config.hostOverride}/${url}`;
         }
         origXhrOpen.call(this, method, urlToOpen, async);
     };
+
+    origXhr.calls = [];
 
     return origXhr;
 }
