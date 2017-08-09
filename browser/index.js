@@ -20,6 +20,11 @@ _window._origWindowXhr = _origWindowXhr;
 _window._origAppendChild = _origAppendChild;
 
 function FeatherNetBrowser (config) {
+    config = config || {};
+
+    if (!config.hostOverride) {
+        config.hostOverride = 'localhost:9876';
+    };
 
     this.install = function () {
         Node.prototype.appendChild = createMockAppendChild(_origAppendChild, config);

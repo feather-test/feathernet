@@ -9,7 +9,7 @@ describe('fetch', () => {
     describe('intercepts fetch when installed', () => {
 
         describe('has a default response', (expect, done) => {
-            let testUrl = 'http://noresponse.com/';
+            let testUrl = 'http://noresponse.com/empty-fetch';
             fetch(testUrl)
                 .then((response) => {
                     if (response && response.ok) {
@@ -27,7 +27,7 @@ describe('fetch', () => {
         });
 
         describe('responds with text', (expect, done) => {
-            let testUrl = 'http://greetings.com/say/hello?a=2&b=3';
+            let testUrl = 'http://greetings.com/say/hello-fetch?a=2&b=3';
             window.fetch(testUrl)
                 .then((response) => {
                     if (response && response.ok) {
@@ -44,7 +44,7 @@ describe('fetch', () => {
         });
 
         describe('responds with complex response mock', (expect, done) => {
-            let testUrl = 'http://complex.com/response';
+            let testUrl = 'http://complex.com/response/complex-fetch';
             window.fetch(testUrl)
                 .then((response) => {
                     if (response && response.ok) {
@@ -64,7 +64,7 @@ describe('fetch', () => {
 
         describe('responds to complex request matcher with json', (expect, done) => {
             let testUrl = 'http://sub.example.com:3000/cars/ford?model=fusion&doors=4';
-            window.fetch(testUrl)
+            window.fetch(testUrl, { credentials: 'include' })
                 .then((response) => {
                     if (response && response.ok) {
                         response.json().then(function (json) {
@@ -80,7 +80,7 @@ describe('fetch', () => {
         });
 
         describe('handles error', (expect, done) => {
-            let testUrl = 'http://errors.com';
+            let testUrl = 'http://errors.com/error-fetch';
             window.fetch(testUrl)
                 .then((response) => {
                     expect(response.ok).toBe(false);

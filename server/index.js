@@ -4,9 +4,9 @@ const serverApps = require('./serverApps');
 function FeatherNetServer (inputConfig) {
     const defaultConfig = {
         server: {
-            port: '9876',
+            adminPort: 9877,
+            port: 9876,
             rootPath: '/',
-            serveIndex: true,
         },
     };
 

@@ -7,13 +7,8 @@ const URL = require('../utils/url');
 
 function allowCors (app) {
     app.all('*', function(req, res, next) {
-        let ref = req.get('Referrer');
-        let allowOrigin = '*';
-        if (ref) {
-            let parsedUrl = new URL(ref);
-            allowOrigin = parsedUrl.protocol + '//' + parsedUrl.host;
-        }
-        res.header('Access-Control-Allow-Origin', allowOrigin);
+        let origin = req.get('Referrer') || req.get('Origin') || req.get('Host') || '*';
+        res.header('Access-Control-Allow-Origin', origin);
         res.header('Access-Control-Allow-Credentials', 'true');
         res.header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type');
         next();
@@ -24,7 +19,7 @@ function createAdmin (featherServer, serverOptions) {
     featherServer.admin = express();
     let admin = featherServer.admin;
 
-    admin.set('port', serverOptions.adminPort || 9877);
+    admin.set('port', serverOptions.adminPort);
 
     allowCors(admin);
 
@@ -43,7 +38,7 @@ function createAdmin (featherServer, serverOptions) {
                         requestMatcher = {
                             contains: {
                                 url: {
-                                    href: requestMatcher,
+                                    hostpath: requestMatcher,
                                 },
                             },
                         };
@@ -77,8 +72,8 @@ function createImpostor (featherServer, serverOptions) {
     featherServer.impostor = express();
     let impostor = featherServer.impostor;
 
-    impostor.set('port', serverOptions.port || 9876);
-    impostor.set('rootPath', serverOptions.rootPath ? path.resolve(serverOptions.rootPath) : '/');
+    impostor.set('port', serverOptions.port);
+    impostor.set('rootPath', path.resolve(serverOptions.rootPath));
 
     allowCors(impostor);
 

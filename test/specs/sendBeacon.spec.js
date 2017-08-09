@@ -7,11 +7,11 @@ describe('sendBeacon', () => {
     });
 
     describe('sends a beacon without errors', (expect) => {
-        window.navigator.sendBeacon('http://greetings.com/sendbeacon-success');
+        window.navigator.sendBeacon('http://greetings.com/hello-sendbeacon');
     });
 
     describe('errors when mocked to error', (expect) => {
-        window.navigator.sendBeacon('http://errors.com/sendbeacon-error');
+        window.navigator.sendBeacon('http://errors.com/error-sendbeacon');
     });
 
 });

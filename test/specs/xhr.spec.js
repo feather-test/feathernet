@@ -9,7 +9,7 @@ describe('xhr', () => {
     describe('intercepts xhr when installed', () => {
 
         describe('has a default response', (expect, done) => {
-            let testUrl = 'http://noresponse.com';
+            let testUrl = 'http://noresponse.com/empty-xhr';
 
             let r = new window.XMLHttpRequest();
             r.onreadystatechange = function () {
@@ -27,7 +27,7 @@ describe('xhr', () => {
         });
 
         describe('responds with text', (expect, done) => {
-            let testUrl = 'http://greetings.com/say/hello?a=2&b=3';
+            let testUrl = 'http://greetings.com/say/hello-xhr?a=2&b=3';
             let r = new XMLHttpRequest();
             r.onreadystatechange = function () {
                 if (r.readyState === 4) {
@@ -41,7 +41,7 @@ describe('xhr', () => {
         });
 
         describe('responds with complex response mock', (expect, done) => {
-            let testUrl = 'http://complex.com/response';
+            let testUrl = 'http://complex.com/response/complex-xhr';
             let r = new XMLHttpRequest();
             r.onreadystatechange = function () {
                 if (r.readyState === 4) {

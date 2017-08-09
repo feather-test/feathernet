@@ -1,24 +1,22 @@
 const FeatherNetBrowser = require('../../browser');
-const featherNet = new FeatherNetBrowser({
-    hostOverride: 'localhost:9876',
-});
+const featherNet = new FeatherNetBrowser();
 
 featherNet.addMocks([
     {
-        request: 'http://noresponse.com'
+        request: 'noresponse.com'
     },
     {
-        request: 'http://errors.com',
+        request: 'errors.com',
         response: {
             status: 500,
         }
     },
     {
-        request: 'http://greetings.com',
+        request: 'greetings.com',
         response: 'hello',
     },
     {
-        request: 'http://complex.com/response',
+        request: 'complex.com/response',
         response: {
             status: 202,
             headers: {
@@ -33,6 +31,7 @@ featherNet.addMocks([
                 method: 'GET',
                 headers: {},
                 url: {
+                    hostpath: 'sub.example.com:3000/cars/ford',
                     protocol: 'http:',
                     host: 'sub.example.com:3000',
                     hostname: 'sub.example.com',

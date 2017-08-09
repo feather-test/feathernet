@@ -16,7 +16,7 @@ let mockTest = new FeatherTestBrowser({
     specs: './specs',
     exitProcessWhenFailing: false,
     nodeAsBrowser: {
-        url: 'http://localhost/',
+        url: 'http://localhost:9876/',
     }
 });
 

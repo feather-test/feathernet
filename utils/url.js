@@ -31,6 +31,7 @@ function parseUrlString (str) {
         hostname: hostname,
         port: port,
         pathname: pathname,
+        hostpath: host + pathname,
         hash: hash,
         search: search
     };
@@ -59,6 +60,7 @@ function URL (initString, initParams) {
         this.hostname = parsed.hostname;
         this.port = parsed.port;
         this.pathname = parsed.pathname;
+        this.hostpath = parsed.hostpath;
         this.hash = parsed.hash;
 
         if (initParams) {
