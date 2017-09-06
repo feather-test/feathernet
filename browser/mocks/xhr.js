@@ -1,3 +1,4 @@
+const intercept = require('../intercept.js');
 
 function createMockXhr (origXhr, config) {
 
@@ -6,10 +7,7 @@ function createMockXhr (origXhr, config) {
         let urlToOpen = url;
         if (!this._urlMocked) {
             this._urlMocked = true;
-            origXhr.calls.push({
-                url: url,
-            });
-            urlToOpen = `http://${config.hostOverride}/${url}`;
+            urlToOpen = intercept(url, config.hostOverride, origXhr) || url;
         }
         origXhrOpen.call(this, method, urlToOpen, async);
     };

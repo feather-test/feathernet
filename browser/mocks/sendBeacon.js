@@ -1,13 +1,8 @@
+const intercept = require('../intercept.js');
 
 function createMockSendBeacon (origSendBeacon, config) {
     function mockSendBeacon (url, data) {
-        let mockedUrl = '';
-        if (url) {
-            mockedUrl = `http://${config.hostOverride}/${url}`;
-            mockSendBeacon.calls.push({
-                url: url,
-            });
-        }
+        let mockedUrl = intercept(url, config.hostOverride, mockSendBeacon) || '';
         return origSendBeacon.call(this, mockedUrl, data);
     };
 
