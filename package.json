@@ -1,6 +1,6 @@
 {
   "name": "feathernet",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "Intercept javascript requests of all types and mock responses",
   "main": "index.js",
   "scripts": {
