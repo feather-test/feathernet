@@ -1,3 +1,5 @@
+const utils = require('seebigs-utils');
+const args = utils.args();
 
 const FeatherNetServer = require('../server');
 
@@ -14,10 +16,15 @@ let mockTest = new FeatherTestBrowser({
         './helpers/mock_setup.js',
     ],
     specs: './specs',
-    exitProcessWhenFailing: false,
+    exitProcessWhenFailing: !!args.ci,
     nodeAsBrowser: {
         url: 'http://localhost:9876/',
     }
 });
 
-mockTest.run();
+mockTest.run(() => {
+    if (args.ci) {
+        featherNet.stop();
+        process.exit(0);
+    }
+});

@@ -4,7 +4,7 @@
   "description": "Intercept javascript requests of all types and mock responses",
   "main": "index.js",
   "scripts": {
-    "test": "node test"
+    "test": "node test -- -ci"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
     "useragent": "^2.3.0"
   },
   "devDependencies": {
-    "feather-test-browser": "^1.2.1"
+    "feather-test-browser": "^1.2.1",
+    "seebigs-utils": "^1.4.1"
   }
 }

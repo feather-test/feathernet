@@ -7,7 +7,7 @@ const _window = typeof window === 'undefined' ? {} : window;
 const _origWindowFetch = _window.fetch;
 const _origWindowXhr = _window.XMLHttpRequest;
 const _origWindowSendBeacon = _window.navigator && _window.navigator.sendBeacon;
-const _origAppendChild = Node.prototype.appendChild;
+const _origAppendChild = _window.Node.prototype.appendChild;
 
 const _global = typeof global === 'undefined' ? {} : global;
 const _origNodeFetch = _global.fetch;
@@ -27,7 +27,7 @@ function FeatherNetBrowser (config) {
     };
 
     this.install = function () {
-        Node.prototype.appendChild = createMockAppendChild(_origAppendChild, config);
+        _window.Node.prototype.appendChild = createMockAppendChild(_origAppendChild, config);
         if (window) {
             window.fetch = createMockFetch(_origWindowFetch, config);
             window.XMLHttpRequest = createMockXhr(_origWindowXhr, config);
@@ -45,7 +45,7 @@ function FeatherNetBrowser (config) {
     };
 
     this.uninstall = function () {
-        Node.prototype.appendChild = _origAppendChild;
+        _window.Node.prototype.appendChild = _origAppendChild;
         if (window) {
             window.fetch = _origWindowFetch;
             window.XMLHttpRequest = _origWindowXhr;
