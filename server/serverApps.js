@@ -4,10 +4,13 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const URL = require('../utils/url');
+const useragent = require('useragent');
 
 function allowCors (app) {
     app.all('*', function(req, res, next) {
+        const userAgent = useragent.lookup(req.headers['user-agent']);
         let origin = req.get('Referrer') || req.get('Origin') || req.get('Host') || '*';
+        if (origin === 'null' && userAgent.family === 'Chrome') { origin = 'file://'; }
         res.header('Access-Control-Allow-Origin', origin);
         res.header('Access-Control-Allow-Credentials', 'true');
         res.header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type');
